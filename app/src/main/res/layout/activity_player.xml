@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="lyon.youtube.pi.test.youtubepi3sample.YoutubePlayer"
+    >
+    <Button
+        android:id="@+id/loopBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:padding="10dp"
+        android:text="LOOP" />
+    <!--UNAUTHORIZED_OVERLAY if youtube play 2 sec stop that is because other view over youtubePlayerFragment-->
+    <RelativeLayout
+        android:id="@+id/youtubePlayerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="100dp"/>
+
+
+
+</RelativeLayout>
