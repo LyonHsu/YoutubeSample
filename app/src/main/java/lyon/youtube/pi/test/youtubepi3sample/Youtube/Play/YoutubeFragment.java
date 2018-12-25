@@ -112,7 +112,14 @@ public class YoutubeFragment extends Fragment {
                             Log.d(TAG,"YouTubePlayer onVideoEnded isLoop:"+isLoop);
                             if (isLoop) {
                                 Log.d(TAG, " loop play");
-                                player.previous();
+                                if(player.hasPrevious()) {
+                                    Log.d(TAG, " loop play+" + player.hasPrevious());
+                                    player.previous();
+                                }
+                                else{
+                                    Log.d(TAG, " loop play+"+player.hasPrevious());
+                                    player.play();
+                                }
                             }
 //                            if(player.hasNext()) {
 //                                player.next();
@@ -142,8 +149,6 @@ public class YoutubeFragment extends Fragment {
 
             }
         });
-
-
 
 
 
