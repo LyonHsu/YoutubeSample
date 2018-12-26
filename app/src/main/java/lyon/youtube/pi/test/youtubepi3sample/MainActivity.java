@@ -1,7 +1,9 @@
 package lyon.youtube.pi.test.youtubepi3sample;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.content.Intent;
+import android.drm.DrmStore;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -12,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +25,8 @@ import java.util.List;
 
 import lyon.youtube.pi.test.youtubepi3sample.Youtube.Search.SearchYoutube;
 import lyon.youtube.pi.test.youtubepi3sample.Youtube.YoutubePoster;
+
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
 public class MainActivity extends AppCompatActivity {
     String TAG =MainActivity.class.getName();
@@ -47,7 +52,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         title = (TextView) findViewById(R.id.title);
         searchEditText = (EditText) findViewById(R.id.searchEditText);
-        searchBtn = (Button) findViewById(R.id.searchBtn);
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+             @Override
+             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                 //按下完成鍵要執行的動作
+                 if (actionId==IME_ACTION_SEARCH){
+                     searchBtn.callOnClick();
+                 }
+                 return false;
+             }
+         });
+        searchEditText.setFocusable(true);
+            searchBtn = (Button) findViewById(R.id.searchBtn);
+        searchBtn.requestFocus();
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclesView);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override

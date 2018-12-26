@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,10 @@ public class YoutubeFragment extends Fragment {
     String videoUrl;
     YouTubePlayer.OnInitializedListener onInitializedListener;
     public  boolean isLoop = false;
+    YouTubePlayer yooutPlayer;
+    private YoutubeFragment.setOnPrivousShowListener setOnPrivousShowListener = null;
+    private YoutubeFragment.setOnNextShowListener setOnNextShowListener  =null;
+    private YoutubeFragment.setPlayPauseShowListener setPlayPauseShowListener  =null;
     @Override
     public void setArguments(Bundle bundle) {
         super.setArguments(bundle);
@@ -82,6 +87,7 @@ public class YoutubeFragment extends Fragment {
             @Override
             public void onInitializationSuccess(Provider provider, final YouTubePlayer player, boolean wasRestored) {
                 if (!wasRestored) {
+                    yooutPlayer=player;
                     player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
                     player.loadVideos(VIDEO_ID2);
                     player.play();
@@ -104,6 +110,9 @@ public class YoutubeFragment extends Fragment {
                         @Override
                         public void onVideoStarted() {
                             Log.d(TAG,"YouTubePlayer onVideoStarted");
+
+                            setOnPrivousShowListener.isPreviounShow(player.hasPrevious());
+                            setOnNextShowListener.isNextShow(player.hasNext());
                         }
 
                         @Override
@@ -134,6 +143,33 @@ public class YoutubeFragment extends Fragment {
                         @Override
                         public void onError(YouTubePlayer.ErrorReason errorReason) {
                             Log.e(TAG,"YouTubePlayer errorReason:"+errorReason);
+                        }
+                    });
+
+                    player.setPlaybackEventListener(new YouTubePlayer.PlaybackEventListener() {
+                        @Override
+                        public void onPlaying() {
+                            setPlayPauseShowListener.isPlayPause(true);
+                        }
+
+                        @Override
+                        public void onPaused() {
+                            setPlayPauseShowListener.isPlayPause(false);
+                        }
+
+                        @Override
+                        public void onStopped() {
+                            setPlayPauseShowListener.isPlayPause(false);
+                        }
+
+                        @Override
+                        public void onBuffering(boolean b) {
+
+                        }
+
+                        @Override
+                        public void onSeekTo(int i) {
+
                         }
                     });
                 }
@@ -168,4 +204,61 @@ public class YoutubeFragment extends Fragment {
         return this.isLoop;
     }
 
+
+    public void setPlay(){
+        if(yooutPlayer!=null){
+            yooutPlayer.play();
+        }
+    }
+
+    public boolean getPlayerStats(){
+        if(yooutPlayer!=null){
+            return yooutPlayer.isPlaying();
+        }
+        return false;
+    }
+
+    public void setPause(){
+        if(yooutPlayer!=null){
+            yooutPlayer.pause();
+        }
+    }
+
+    public void setNext(){
+        if(yooutPlayer!=null){
+            if(yooutPlayer.hasNext())
+                yooutPlayer.next();
+        }
+    }
+
+    public void setPrevious(){
+        if(yooutPlayer!=null){
+            if(yooutPlayer.hasPrevious())
+                yooutPlayer.previous();
+        }
+    }
+
+    public static interface setOnPrivousShowListener{
+        boolean isPreviounShow(boolean show);
+    }
+
+    public static interface setOnNextShowListener{
+        boolean isNextShow(boolean show);
+    }
+
+    public static interface setPlayPauseShowListener{
+        boolean isPlayPause(boolean playing);
+    }
+
+    public void setOnNextBtShowListener(setOnNextShowListener listener){
+        this.setOnNextShowListener = listener;
+    }
+
+    public void setOnPrivousBtnShowListener(setOnPrivousShowListener listener){
+        this.setOnPrivousShowListener = listener;
+    }
+
+    public void setPlayPauseBtnStatsListener(setPlayPauseShowListener listener){
+        this.setPlayPauseShowListener = listener;
+    }
 }

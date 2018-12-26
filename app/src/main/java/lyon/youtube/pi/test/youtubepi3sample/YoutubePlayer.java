@@ -14,6 +14,9 @@ import lyon.youtube.pi.test.youtubepi3sample.Youtube.Play.YoutubeFragment;
 
 public class YoutubePlayer extends FragmentActivity {
     public  String VIDEO_ID = "OsUr8N7t4zc";
+    Button previousBtn ,loopBtn ,NextBtn ,PlayPauseBtn;
+    private YoutubeFragment.setOnPrivousShowListener setOnPrivousShowListener = null;
+    private YoutubeFragment.setOnNextShowListener setOnNextShowListener  =null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +30,42 @@ public class YoutubePlayer extends FragmentActivity {
                 .replace(R.id.youtubePlayerFragment, fragment)
                 .commit();
 
-        final Button loopBtn= (Button) findViewById(R.id.loopBtn);
+        fragment.setOnNextBtShowListener(new YoutubeFragment.setOnNextShowListener() {
+            @Override
+            public boolean isNextShow(boolean show) {
+                if(show)
+                    NextBtn.setEnabled(true);
+                else
+                    NextBtn.setEnabled(false);
+                return false;
+            }
+        });
+
+        fragment.setOnPrivousBtnShowListener(new YoutubeFragment.setOnPrivousShowListener() {
+            @Override
+            public boolean isPreviounShow(boolean show) {
+                if(show)
+                    previousBtn.setEnabled(true);
+                else
+                    previousBtn.setEnabled(false);
+                return false;
+            }
+        });
+
+        fragment.setPlayPauseBtnStatsListener(new YoutubeFragment.setPlayPauseShowListener() {
+            @Override
+            public boolean isPlayPause(boolean playing) {
+                if(playing){
+                    PlayPauseBtn.setText("playing");
+                }else{
+                    PlayPauseBtn.setText("pause");
+                }
+
+                return false;
+            }
+        });
+
+        loopBtn= (Button) findViewById(R.id.loopBtn);
         loopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +82,31 @@ public class YoutubePlayer extends FragmentActivity {
         }else{
             loopBtn.setText("NoLoop");
         }
+
+        previousBtn = (Button)findViewById(R.id.PreviousBtn);
+        previousBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.setPrevious();
+            }
+        });
+        NextBtn = (Button)findViewById(R.id.NextBtn);
+        NextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.setNext();
+            }
+        });
+        PlayPauseBtn = (Button)findViewById(R.id.PlayPauseBtn);
+        PlayPauseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fragment.getPlayerStats())
+                    fragment.setPause();
+                else
+                    fragment.setPlay();
+            }
+        });
     }
 
     @Override

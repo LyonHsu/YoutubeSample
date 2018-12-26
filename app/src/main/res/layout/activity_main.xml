@@ -28,14 +28,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
             android:hint="search"
-            android:paddingRight="110dp" />
+            android:paddingRight="110dp"
+            android:nextFocusRight="@id/searchBtn"
+            />
 
         <Button
             android:id="@+id/searchBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:background="@drawable/btn_light_blue"
             android:text="Search" />
     </LinearLayout>
 
